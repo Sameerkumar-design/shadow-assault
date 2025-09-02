@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shadow Assault - Enhanced Krunker.io Style FPS</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Orbitron', monospace;
+            overflow: hidden;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        canvas { display: block; position: absolute; top: 0; left: 0; z-index: 1; }
+        
+        .hud {
+            position: absolute;
+            z-index: 10;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+        }
+        
+        #top-left-hud {
+            top: 20px; left: 20px;
+            background: linear-gradient(135deg, rgba(0,0,0,0.8), rgba(0,0,0,0.6));
+            padding: 20px; border-radius: 15px;
+            border: 2px solid #00BFFF;
+            box-shadow: 0 0 20px rgba(0,191,255,0.3);
+            min-width: 250px;
+        }
+        
+        #top-right-hud {
+            top: 20px; right: 20px;
+            background: linear-gradient(135deg, rgba(0,0,0,0.8), rgba(0,0,0,0.6));
+            padding: 20px; border-radius: 15px;
+            border: 2px solid #00FF00;
+            box-shadow: 0 0 20px rgba(0,255,0,0.3);
+            text-align: right; min-width: 200px;
+        }
+        
+        .hud-item {
+            margin: 8px 0; font-size: 16px;
+            display: flex; align-items: center; gap: 10px;
+        }
+        
+        .hud-icon { font-size: 18px; width: 25px; text-align: center; }
+        
+        #crosshair {
+            position: absolute; top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            color: #00FFFF; font-size: 32px; z-index: 15;
+            text-shadow: 0 0 10px #00FFFF, 0 0 20px #00FFFF;
+            font-weight: bold; pointer-events: none;
+        }
+        
+        #instructions {
+            position: absolute; bottom: 20px; left: 20px;
+            background: linear-gradient(135deg, rgba(0,0,0,0.9), rgba(0,0,0,0.7));
+            padding: 20px; border-radius: 15px;
+            border: 2px solid #FF6B6B;
+            box-shadow: 0 0 20px rgba(255,107,107,0.3);
+            font-size: 14px; max-width: 300px;
+        }
+        
+        .instructions-title {
+            color: #FF6B6B; font-weight: bold;
+            margin-bottom: 10px; font-size: 18px; text-align: center;
+        }
+        
+        .instruction-line {
+            margin: 5px 0; display: flex; align-items: center; gap: 10px;
+        }
+        
+        .key {
+            background: linear-gradient(135deg, #444, #666);
+            color: white; padding: 4px 8px; border-radius: 5px;
+            font-size: 12px; font-weight: bold;
+            min-width: 30px; text-align: center; border: 1px solid #888;
+        }
+        
+        #weapon-selector {
+            position: absolute; top: 50%; right: 30px;
+            transform: translateY(-50%);
+            background: linear-gradient(135deg, rgba(0,0,0,0.8), rgba(0,0,0,0.6));
+            padding: 20px 15px; border-radius: 15px;
+            border: 2px solid #9B59B6;
+            box-shadow: 0 0 20px rgba(155,89,182,0.3);
+        }
+        
+        .weapon-slot {
+            margin: 15px 0; padding: 10px; border-radius: 8px;
+            border: 2px solid transparent; text-align: center;
+            cursor: pointer; transition: all 0.3s ease;
+            background: rgba(255,255,255,0.1);
+        }
+        
+        .weapon-slot.active {
+            border-color: #FFD700;
+            background: rgba(255,215,0,0.2);
+            box-shadow: 0 0 15px rgba(255,215,0,0.4);
+        }
+        
+        .weapon-slot:hover {
+            background: rgba(255,255,255,0.2);
+            transform: scale(1.05);
+        }
+        
+        .weapon-name { font-size: 14px; font-weight: bold; margin-bottom: 5px; }
+        .weapon-key { font-size: 12px; color: #BBB; }
+    </style>
+</head>
+<body>
+    <div class="hud" id="top-left-hud">
+        <div class="hud-item" id="health">
+            <span class="hud-icon">❤️</span>
+            <span>Health: 100</span>
+        </div>
+        <div class="hud-item" id="ammo">
+            <span class="hud-icon">🔫</span>
+            <span>30/90</span>
+        </div>
+        <div class="hud-item" id="weapon">
+            <span class="hud-icon">⚡</span>
+            <span>AK-47</span>
+        </div>
+        <div class="hud-item" id="controls-status">
+            <span class="hud-icon">🎮</span>
+            <span>Click to Play</span>
+        </div>
+    </div>
+    
+    <div class="hud" id="top-right-hud">
+        <div class="hud-item" id="score">
+            <span>💀 Kills: 0 | Score: 0</span>
+        </div>
+    </div>
+    
+    <div id="crosshair">✦</div>
+    
+    <div id="weapon-selector">
+        <div class="weapon-slot active" data-weapon="assault_rifle">
+            <div class="weapon-name">AK-47</div>
+            <div class="weapon-key">Press 1</div>
+        </div>
+        <div class="weapon-slot" data-weapon="sniper">
+            <div class="weapon-name">AWP</div>
+            <div class="weapon-key">Press 2</div>
+        </div>
+        <div class="weapon-slot" data-weapon="pistol">
+            <div class="weapon-name">Glock</div>
+            <div class="weapon-key">Press 3</div>
+        </div>
+    </div>
+    
+    <div id="instructions">
+        <div class="instructions-title">🎯 SHADOW ASSAULT</div>
+        <div class="instruction-line">
+            <span class="key">CLICK</span>
+            <span>Activate & shoot</span>
+        </div>
+        <div class="instruction-line">
+            <span class="key">WASD</span>
+            <span>Move around</span>
+        </div>
+        <div class="instruction-line">
+            <span class="key">SHIFT</span>
+            <span>Sprint</span>
+        </div>
+        <div class="instruction-line">
+            <span class="key">SPACE</span>
+            <span>Jump</span>
+        </div>
+        <div class="instruction-line">
+            <span class="key">1-3</span>
+            <span>Switch weapons</span>
+        </div>
+        <div class="instruction-line">
+            <span class="key">R</span>
+            <span>Reload</span>
+        </div>
+    </div>
+    
+    <script type="module" src="js/main-enhanced.js"></script>
+</body>
+</html>

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>Shadow Assault - FPS Game</title>
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://unpkg.com/three@0.156.1/build/three.module.js",
+            "three/": "https://unpkg.com/three@0.156.1/",
+            "./three.module.js": "https://unpkg.com/three@0.156.1/build/three.module.js",
+            "/three.module.js": "https://unpkg.com/three@0.156.1/build/three.module.js"
+        }
+    }
+    </script>
+    <style>
+        body { margin: 0; overflow: hidden; font-family: 'Arial', sans-serif; background: linear-gradient(45deg, #667eea 0%, #764ba2 100%); }
+        canvas { display: block; position: absolute; top: 0; left: 0; z-index: 1; }
+        #hud { 
+            position: absolute; 
+            top: 20px; 
+            left: 20px; 
+            color: white; 
+            font-family: 'Arial', sans-serif; 
+            z-index: 10; 
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+            background: rgba(0,0,0,0.3);
+            padding: 15px;
+            border-radius: 10px;
+            border: 2px solid #00BFFF;
+        }
+        #hud div {
+            margin: 5px 0;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        #crosshair { 
+            position: absolute; 
+            top: 50%; 
+            left: 50%; 
+            transform: translate(-50%, -50%); 
+            color: #00FFFF; 
+            font-size: 24px; 
+            z-index: 10; 
+            text-shadow: 0 0 10px #00FFFF;
+            font-weight: bold;
+        }
+        #instructions { 
+            position: absolute; 
+            bottom: 20px; 
+            left: 20px; 
+            color: white; 
+            font-family: 'Arial', sans-serif; 
+            font-size: 14px; 
+            z-index: 10; 
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+            background: rgba(0,0,0,0.3);
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #00BFFF;
+        }
+        #score-display {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            color: #00FF00;
+            font-family: 'Arial', sans-serif;
+            font-size: 24px;
+            font-weight: bold;
+            z-index: 10;
+            text-shadow: 0 0 10px #00FF00;
+            background: rgba(0,0,0,0.3);
+            padding: 10px 20px;
+            border-radius: 10px;
+            border: 2px solid #00FF00;
+        }
+    </style>
+</head>
+<body>
+    <div id="hud">
+        <div class="hud-item" id="health">
+            <span class="hud-icon">❤️</span>
+            <span>Health: 100</span>
+        </div>
+        <div class="hud-item" id="ammo">
+            <span class="hud-icon">🔫</span>
+            <span>30/120</span>
+        </div>
+        <div class="hud-item" id="weapon">
+            <span class="hud-icon">⚡</span>
+            <span>AK-47</span>
+        </div>
+        <div class="hud-item" id="controls-status">
+            <span class="hud-icon">🎮</span>
+            <span>Click to Enter Combat</span>
+        </div>
+    </div>
+    <div id="score-display">
+        <div id="score">💀 Kills: 0</div>
+    </div>
+    <div id="crosshair">✦</div>
+    <div id="instructions">
+        <div style="color: #00FF00; font-weight: bold; margin-bottom: 5px;">🎮 SHADOW ASSAULT</div>
+        <div>📱 Click anywhere to start playing!</div>
+        <div>🖱️ Mouse to look around and left-click to shoot</div>
+        <div>⌨️ WASD to move • SPACE to jump</div>
+        <div style="color: #FFD700;">🎯 Eliminate all colorful robot enemies!</div>
+    </div>
+    <script type="module" src="js/main-ultimate.js"></script>
+</body>
+</html>
